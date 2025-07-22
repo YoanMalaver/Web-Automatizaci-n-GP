@@ -20,11 +20,6 @@ steps:
       options: '-Dwebdriver.driver=chrome'
       publishJUnitResults: true
       testResultsFiles: '**/target/site/serenity/*.xml'
-      javaHomeOption: 'JDKVersion'
-      mavenVersionOption: 'Default'
-      mavenAuthenticateFeed: false
-      effectivePomSkip: false
-      sonarQubeRunAnalysis: false
 
   # Publicar el reporte Serenity como artefacto
   - task: PublishBuildArtifacts@1
