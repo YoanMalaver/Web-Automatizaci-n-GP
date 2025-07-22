@@ -1,40 +1,26 @@
-# Maven
-# Build your Java project and run tests with Apache Maven.
-# Add steps that analyze code, save build artifacts, deploy, and more:
-# https://docs.microsoft.com/azure/devops/pipelines/languages/java
-
 trigger:
   branches:
     include:
       - main  # Ajusta según tu rama
 
 pool:
-  vmImage: 'ubuntu-latest'
+  name: 'Mac OS'  # Usa el agente que configuraste en tu Mac
 
 variables:
-  JAVA_HOME: '/usr/lib/jvm/temurin-21-jdk-amd64'  # Java 21 ya viene instalado en ubuntu-latest
   MAVEN_OPTS: "-Dmaven.repo.local=.m2/repository"
 
 steps:
 
-# 1. Cache de dependencias Maven
-- task: Cache@2
-  inputs:
-    key: 'maven | "$(Agent.OS)" | **/pom.xml'
-    restoreKeys: |
-      maven | "$(Agent.OS)"
-    path: $(Pipeline.Workspace)/.m2/repository
-
-# 2. Ejecutar pruebas con Maven y generar reporte Serenity
+# 1. Ejecutar pruebas con Maven y generar reporte Serenity
 - task: Maven@3
   inputs:
     mavenPomFile: 'pom.xml'
     goals: 'clean verify'
     options: '-Dwebdriver.driver=chrome'
     publishJUnitResults: true
-    testResultsFiles: '**/target/site/serenity/*.xml'
+    testResultsFiles: '**/target/surefire-reports/*.xml'
 
-# 3. Publicar reportes Serenity como artefacto
+# 2. Publicar reportes Serenity como artefacto
 - task: PublishBuildArtifacts@1
   inputs:
     PathtoPublish: 'target/site/serenity'
