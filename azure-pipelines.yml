@@ -1,28 +1,13 @@
 trigger:
   branches:
     include:
-      - main  # Ajusta según tu rama
+      - main
 
 pool:
-  name: 'Mac OS'  # Usa el agente que configuraste en tu Mac
-
-variables:
-  MAVEN_OPTS: "-Dmaven.repo.local=.m2/repository"
+  name: 'Mac OS'
 
 steps:
+  - checkout: self
 
-# 1. Ejecutar pruebas con Maven y generar reporte Serenity
-- task: Maven@3
-  inputs:
-    mavenPomFile: 'pom.xml'
-    goals: 'clean verify'
-    options: '-Dwebdriver.driver=chrome'
-    publishJUnitResults: true
-    testResultsFiles: '**/target/surefire-reports/*.xml'
-
-# 2. Publicar reportes Serenity como artefacto
-- task: PublishBuildArtifacts@1
-  inputs:
-    PathtoPublish: 'target/site/serenity'
-    ArtifactName: 'serenity-report'
-    publishLocation: 'Container'
+  - script: echo "¡Hola desde mi Mac con Azure DevOps!"
+    displayName: 'Paso de prueba'
